@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=xml_analytic
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # Используем правильного пользователя и базу данных
+      test: ["CMD-SHELL", "pg_isready -U postgres -d xml_analytic"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: .
+    volumes:
+      - .:/app  
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=xml_analytic
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --app-dir app --reload --reload-dir app"
+
+volumes:
+  postgres_data:
