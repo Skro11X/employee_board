@@ -19,7 +19,7 @@ if config.config_file_name is not None:
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
-from app.database.models import Base  
+from database.models import Base  
 target_metadata = Base.metadata
 # ---------------------------------------
 

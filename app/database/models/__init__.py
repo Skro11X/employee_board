@@ -1,10 +1,6 @@
 from .base import Base
-from .semd import Semd, Section
-from .path import Path
+from .employee import Employee
 
 __all__ = (
-    "Base",
-    "Semd",
-    "Section",
-    "Path",
+    "Employee",
 )

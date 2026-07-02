@@ -4,14 +4,14 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=xml_analytic
+      - POSTGRES_DB=employee_board
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
       # Используем правильного пользователя и базу данных
-      test: ["CMD-SHELL", "pg_isready -U postgres -d xml_analytic"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d employee_board"]
       interval: 3s
       timeout: 3s
       retries: 5
@@ -27,7 +27,7 @@ services:
       - DB_PASSWORD=postgres
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_NAME=xml_analytic
+      - DB_NAME=employee_board
     depends_on:
       db:
         condition: service_healthy

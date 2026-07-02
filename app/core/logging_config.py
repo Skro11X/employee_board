@@ -35,4 +35,4 @@ class LogConfig(BaseModel):
 
 def setup_logging():
     logging.config.dictConfig(LogConfig().model_dump())
-    return logging.getLogger("xml_analytic")
+    return logging.getLogger("employee_board")

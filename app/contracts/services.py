@@ -1,2 +1,9 @@
-from abc import ABC, abstractmethod
+from typing import Protocol
+from schemas import EmployeesDTO, EmployeeFilterDTO
 
+
+class EmployeesServiceProtocol(Protocol):
+    async def get_list(self, filter: EmployeeFilterDTO) -> tuple[EmployeesDTO, int]:...
+    async def update(self, employee_uuid: str, employee: EmployeesDTO) -> EmployeesDTO:...
+    async def soft_delete(self, employee_uuid: str) -> EmployeesDTO:...
+    

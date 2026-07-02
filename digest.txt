@@ -1,0 +1,1033 @@
+Directory structure:
+└── employee_board/
+    ├── README.md
+    ├── alembic.ini
+    ├── docker-compose.yml
+    ├── Dockerfile
+    ├── requirements.txt
+    ├── .dockerignore
+    ├── app/
+    │   ├── main.py
+    │   ├── api/
+    │   │   ├── routes.py
+    │   │   ├── dependencies/
+    │   │   │   ├── __init__.py
+    │   │   │   ├── db_session_dep.py
+    │   │   │   ├── repo_dep.py
+    │   │   │   └── service_dep.py
+    │   │   ├── handlers/
+    │   │   │   ├── __init__.py
+    │   │   │   └── employee.py
+    │   │   ├── middleware/
+    │   │   │   └── __init__.py
+    │   │   ├── serializer/
+    │   │   │   ├── __init__.py
+    │   │   │   └── employee.py
+    │   │   └── services/
+    │   │       ├── __init__.py
+    │   │       └── employees_service.py
+    │   ├── constants/
+    │   │   └── __init__.py
+    │   ├── contracts/
+    │   │   ├── __init__.py
+    │   │   ├── repository.py
+    │   │   └── services.py
+    │   ├── core/
+    │   │   ├── __init__.py
+    │   │   ├── config.py
+    │   │   └── logging_config.py
+    │   ├── database/
+    │   │   ├── __init__.py
+    │   │   ├── database.py
+    │   │   ├── migrations/
+    │   │   │   ├── README
+    │   │   │   ├── env.py
+    │   │   │   └── script.py.mako
+    │   │   └── models/
+    │   │       ├── __init__.py
+    │   │       └── base.py
+    │   ├── repositories/
+    │   │   ├── __init__.py
+    │   │   └── employees.py
+    │   ├── schemas/
+    │   │   ├── __init__.py
+    │   │   ├── base.py
+    │   │   └── employee.py
+    │   └── services/
+    │       ├── __init__.py
+    │       └── employees_service.py
+    └── test/
+        ├── api/
+        │   ├── routes.py
+        │   ├── handlers/
+        │   │   ├── __init__.py
+        │   │   └── employee.py
+        │   └── serializer/
+        │       ├── __init__.py
+        │       └── employee.py
+        ├── repositories/
+        │   └── __init__.py
+        ├── services/
+        │   ├── __init__.py
+        │   └── employees_service.py
+        └── sсhemas/
+            ├── __init__.py
+            ├── base.py
+            └── employee.py
+
+================================================
+FILE: README.md
+================================================
+# Test task
+
+
+
+================================================
+FILE: alembic.ini
+================================================
+# A generic, single database configuration.
+
+[alembic]
+# path to migration scripts
+script_location = app/database/migrations
+
+# template used to generate migration file names; The default value is %%(rev)s_%%(slug)s
+# Uncomment the line below if you want the files to be prepended with date and time
+# see https://alembic.sqlalchemy.org/en/latest/tutorial.html#editing-the-ini-file
+# for all available tokens
+# file_template = %%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s
+
+# sys.path path, will be prepended to sys.path if present.
+# defaults to the current working directory.
+prepend_sys_path = .
+
+# timezone to use when rendering the date within the migration file
+# as well as the filename.
+# If specified, requires the python>=3.9 or backports.zoneinfo library.
+# Any required deps can installed by adding `alembic[tz]` to the pip requirements
+# string value is passed to ZoneInfo()
+# leave blank for localtime
+# timezone =
+
+# max length of characters to apply to the
+# "slug" field
+# truncate_slug_length = 40
+
+# set to 'true' to run the environment during
+# the 'revision' command, regardless of autogenerate
+# revision_environment = false
+
+# set to 'true' to allow .pyc and .pyo files without
+# a source .py file to be detected as revisions in the
+# versions/ directory
+# sourceless = false
+
+# version location specification; This defaults
+# to app/database/migrations/versions.  When using multiple version
+# directories, initial revisions must be specified with --version-path.
+# The path separator used here should be the separator specified by "version_path_separator" below.
+# version_locations = %(here)s/bar:%(here)s/bat:app/database/migrations/versions
+
+# version path separator; As mentioned above, this is the character used to split
+# version_locations. The default within new alembic.ini files is "os", which uses os.pathsep.
+# If this key is omitted entirely, it falls back to the legacy behavior of splitting on spaces and/or commas.
+# Valid values for version_path_separator are:
+#
+# version_path_separator = :
+# version_path_separator = ;
+# version_path_separator = space
+version_path_separator = os  # Use os.pathsep. Default configuration used for new projects.
+
+# set to 'true' to search source files recursively
+# in each "version_locations" directory
+# new in Alembic version 1.10
+# recursive_version_locations = false
+
+# the output encoding used when revision files
+# are written from script.py.mako
+# output_encoding = utf-8
+
+; sqlalchemy.url = postgresql+asyncpg://postgres:postgres@localhost:5432/xml_analytic
+sqlalchemy.url = postgresql+asyncpg://postgres:postgres@db:5432/xml_analytic
+
+
+[post_write_hooks]
+# post_write_hooks defines scripts or Python functions that are run
+# on newly generated revision scripts.  See the documentation for further
+# detail and examples
+
+# format using "black" - use the console_scripts runner, against the "black" entrypoint
+# hooks = black
+# black.type = console_scripts
+# black.entrypoint = black
+# black.options = -l 79 REVISION_SCRIPT_FILENAME
+
+# lint with attempts to fix using "ruff" - use the exec runner, execute a binary
+# hooks = ruff
+# ruff.type = exec
+# ruff.executable = %(here)s/.venv/bin/ruff
+# ruff.options = --fix REVISION_SCRIPT_FILENAME
+
+# Logging configuration
+[loggers]
+keys = root,sqlalchemy,alembic
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = WARN
+handlers = console
+qualname =
+
+[logger_sqlalchemy]
+level = WARN
+handlers =
+qualname = sqlalchemy.engine
+
+[logger_alembic]
+level = INFO
+handlers =
+qualname = alembic
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(levelname)-5.5s [%(name)s] %(message)s
+datefmt = %H:%M:%S
+
+
+
+================================================
+FILE: docker-compose.yml
+================================================
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=employee_board
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # Используем правильного пользователя и базу данных
+      test: ["CMD-SHELL", "pg_isready -U postgres -d employee_board"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: .
+    volumes:
+      - .:/app  
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=employee_board
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --app-dir app --reload --reload-dir app"
+
+volumes:
+  postgres_data:
+
+
+
+================================================
+FILE: Dockerfile
+================================================
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install system dependencies if needed
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Create shared volume directory
+RUN mkdir -p /shared_data && chmod 777 /shared_data
+
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "app"]
+
+
+
+
+================================================
+FILE: requirements.txt
+================================================
+fastapi>=0.137.2
+pydantic>=2.7.4
+pydantic-settings>=2.3.4
+uvicorn>=0.30.1
+python-multipart>=0.0.9
+sqlalchemy>=2.0.31
+asyncpg>=0.29.0
+alembic>=1.13.1
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+pytest-mock>=3.12.0
+httpx>=0.27.0
+
+
+================================================
+FILE: .dockerignore
+================================================
+venv
+__pycache__
+*.pyc
+.git
+.env
+
+
+
+================================================
+FILE: app/main.py
+================================================
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from core.config import settings
+from app.api.routes import router as api_router
+from core.logging_config import setup_logging
+
+logger = setup_logging()
+
+app = FastAPI(title=settings.PROJECT_NAME)
+
+app.include_router(api_router)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+
+================================================
+FILE: app/api/routes.py
+================================================
+import logging
+from fastapi import APIRouter
+from api.handlers.employee import router as employees_handlers
+
+router = APIRouter(prefix="/api/v1")
+
+router.include_router(employees_handlers, tags=["employees_handlers"]) 
+
+
+
+================================================
+FILE: app/api/dependencies/__init__.py
+================================================
+from .service_dep import get_employee_service
+
+__all__ = [
+    "get_employee_service"
+]
+
+
+================================================
+FILE: app/api/dependencies/db_session_dep.py
+================================================
+from typing import AsyncGenerator
+from app.database.database import engine
+from sqlalchemy.ext.asyncio import AsyncSession
+
+
+async def get_db_session_with_commit() -> AsyncGenerator[AsyncSession, None]:
+    session = AsyncSession(engine)
+    try:
+        yield session
+        await session.commit()
+    except Exception:
+        await session.rollback()
+        raise
+    finally:
+        await session.close()
+
+
+================================================
+FILE: app/api/dependencies/repo_dep.py
+================================================
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from contracts import EmployeesRepositoryProtocol
+from repositories import EmployeesRepository
+from .db_session_dep import get_db_session_with_commit
+
+
+async def get_employee_repository(
+    session: AsyncSession = Depends(get_db_session_with_commit)
+) -> EmployeesRepositoryProtocol:
+    return EmployeesRepository(session)
+
+
+
+================================================
+FILE: app/api/dependencies/service_dep.py
+================================================
+from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import Depends 
+from app.api.dependencies.db_session_dep import get_db_session_with_commit
+from services import EmployeesService
+from contracts import EmployeesServiceProtocol
+from .repo_dep import get_employee_repository
+
+
+async def get_employee_service(repo=Depends(get_employee_repository)) -> EmployeesServiceProtocol:
+    return EmployeesService(repo)
+
+
+async def some_service(session: AsyncSession = Depends(get_db_session_with_commit)):
+    pass
+    
+
+
+
+================================================
+FILE: app/api/handlers/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: app/api/handlers/employee.py
+================================================
+import logging
+from typing import Annotated, List
+from fastapi import APIRouter, UploadFile, File, Depends, Form, Query
+from pydantic import Json
+from api.dependencies import get_employee_service
+from api.serializer import PaginateParams, EmployeeFilterParams, EmployeesResponse
+from schemas import EmployeeFilterDTO
+from contracts import EmployeesServiceProtocol
+
+
+
+logger = logging.getLogger(__name__)
+router = APIRouter()
+
+
+@router.get("/employee/")
+async def get_employee(
+    employee_service: Annotated[EmployeesServiceProtocol, Depends(get_employee_service)],
+    paginate: PaginateParams = Depends(),
+    filters: EmployeeFilterParams = Depends(),
+):
+    employees, count = employee_service.get_list(
+        EmployeeFilterDTO(
+            **paginate.model_dump(),
+            **filters.model_dump(),
+        )         
+    )
+
+    return EmployeesResponse(
+        items = employees,
+        count = count,
+        page = paginate.page,
+        per_page = paginate.per_page,
+    )
+
+
+@router.post("/employees/")
+async def create_employee(
+    
+):
+    pass
+
+
+@router.put("/employee/{uuid}")
+async def put_employee(
+    
+):
+    return 
+
+@router.delete("/employee/{uuid}")
+async def delete_employee(
+    
+):
+    return 
+
+
+================================================
+FILE: app/api/middleware/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: app/api/serializer/__init__.py
+================================================
+from .employee import PaginateParams, EmployeeFilterParams
+
+__all__ = [
+    "PaginateParams",
+    "EmployeeFilterParams"
+]
+
+
+================================================
+FILE: app/api/serializer/employee.py
+================================================
+from pydantic import Field
+from schemas import BaseRequest, Gender, BaseResponse, EmployeesDTO
+
+
+class PaginateParams(BaseRequest):
+    page: int = Field(default=1, ge=1)
+    per_page: int = Field(default=10, ge=1, le=100)
+
+
+class EmployeeFilterParams(BaseRequest):
+    search: str | None = None
+    gender: list[Gender] | None = None
+    age_from: int | None = Field(default=None, ge=0)
+    age_to: int | None = Field(default=None, le=150)
+
+
+class EmployeesResponse(BaseResponse):
+    items: list[EmployeesDTO]
+    count: int
+    page: int
+    per_page: int
+
+
+================================================
+FILE: app/api/services/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: app/api/services/employees_service.py
+================================================
+from typing import Protocol
+from schemas import EmployeesDTO, EmployeeFilterDTO
+
+
+class EmployeesServiceProtocol(Protocol):
+    async def get_by_id(self, employee_uuid: str) -> EmployeesDTO: ...
+    async def get_list(self, filter: EmployeeFilterDTO) -> EmployeesDTO: ...
+    async def update(self, employee_uuid: str, employee: EmployeesDTO) -> EmployeesDTO: ...
+    async def soft_delete(self, employee_uuid: str) -> EmployeesDTO: ...
+
+
+================================================
+FILE: app/constants/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: app/contracts/__init__.py
+================================================
+from .repository import EmployeesRepositoryProtocol
+from .services import EmployeesServiceProtocol
+__all__ = [
+    "EmployeesRepositoryProtocol",
+    "EmployeesServiceProtocol"
+]
+
+
+================================================
+FILE: app/contracts/repository.py
+================================================
+from typing import Protocol
+from schemas import EmployeesDTO, EmployeeFilterDTO
+
+
+class EmployeesRepositoryProtocol(Protocol):
+    async def get_list(self, filter: EmployeeFilterDTO) -> EmployeesDTO: ...
+    async def get_count(self, filter: EmployeeFilterDTO) -> int: ...
+    async def update(self, employee_uuid: str, employee: EmployeesDTO) -> EmployeesDTO: ...
+    async def soft_delete(self, employee_uuid: str) -> EmployeesDTO: ...
+
+
+================================================
+FILE: app/contracts/services.py
+================================================
+from typing import Protocol
+from schemas import EmployeesDTO, EmployeeFilterDTO
+
+
+class EmployeesServiceProtocol(Protocol):
+    async def get_list(self, filter: EmployeeFilterDTO) -> tuple[EmployeesDTO, int]:...
+    async def update(self, employee_uuid: str, employee: EmployeesDTO) -> EmployeesDTO:...
+    async def soft_delete(self, employee_uuid: str) -> EmployeesDTO:...
+    
+
+
+================================================
+FILE: app/core/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: app/core/config.py
+================================================
+import os
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    PROJECT_NAME: str = "Employee board"
+
+    DB_USER: str = "postgres"
+    DB_PASSWORD: str = "postgres"
+    DB_HOST: str = "db"
+    DB_PORT: int = 5432
+    DB_NAME: str = "employee_board"
+
+    model_config = SettingsConfigDict(
+        env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"),
+        extra="ignore"
+    )
+
+    def get_db_url(self):
+        return (f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@"
+                f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}")
+
+settings = Settings()
+
+
+
+================================================
+FILE: app/core/logging_config.py
+================================================
+import logging
+import logging.config
+import sys
+from pydantic import BaseModel
+
+
+class LogConfig(BaseModel):
+    """Logging configuration to be set for the server"""
+
+    LOGGER_NAME: str = "employees_board"
+    LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | %(name)s | %(message)s"
+    LOG_LEVEL: str = "DEBUG"
+
+    # Logging config
+    version: int = 1
+    disable_existing_loggers: bool = False
+    formatters: dict = {
+        "default": {
+            "()": "uvicorn.logging.DefaultFormatter",
+            "fmt": LOG_FORMAT,
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    }
+    handlers: dict = {
+        "default": {
+            "formatter": "default",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stderr",
+        },
+    }
+    loggers: dict = {
+        LOGGER_NAME: {"handlers": ["default"], "level": LOG_LEVEL},
+    }
+
+
+def setup_logging():
+    logging.config.dictConfig(LogConfig().model_dump())
+    return logging.getLogger("employee_board")
+
+
+
+================================================
+FILE: app/database/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: app/database/database.py
+================================================
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from core.config import settings
+
+engine = create_async_engine(settings.get_db_url(), echo=True)
+
+AsyncSessionLocal = async_sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+)
+
+
+================================================
+FILE: app/database/migrations/README
+================================================
+Generic single-database configuration.
+
+
+================================================
+FILE: app/database/migrations/env.py
+================================================
+import sys
+import asyncio
+from pathlib import Path
+from logging.config import fileConfig
+
+from sqlalchemy import pool
+from sqlalchemy.ext.asyncio import async_engine_from_config
+from alembic import context
+
+# this is the Alembic Config object, which provides
+# access to the values within the .ini file in use.
+config = context.config
+
+# Interpret the config file for Python logging.
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+# --- Настройка путей и импорт Base ---
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(BASE_DIR))
+
+from database.models import Base  
+target_metadata = Base.metadata
+# ---------------------------------------
+
+def run_migrations_offline() -> None:
+    """Run migrations in 'offline' mode."""
+    url = config.get_main_option("sqlalchemy.url")
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+def do_run_migrations(connection):
+    """Синхронная функция, которую мы вызовем внутри асинхронного контекста"""
+    context.configure(connection=connection, target_metadata=target_metadata)
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+async def run_async_migrations() -> None:
+    """Асинхронное подключение и запуск миграций"""
+    connectable = async_engine_from_config(
+        config.get_section(config.config_ini_section, {}),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+
+    async with connectable.connect() as connection:
+        # Выполняем синхронную функцию миграций в асинхронном коннекте
+        await connection.run_sync(do_run_migrations)
+
+    await connectable.dispose()
+
+
+def run_migrations_online() -> None:
+    """Run migrations in 'online' mode."""
+    # Запускаем асинхронный цикл событий
+    asyncio.run(run_async_migrations())
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
+
+
+================================================
+FILE: app/database/migrations/script.py.mako
+================================================
+"""${message}
+
+Revision ID: ${up_revision}
+Revises: ${down_revision | comma,n}
+Create Date: ${create_date}
+
+"""
+from typing import Sequence, Union
+
+from alembic import op
+import sqlalchemy as sa
+${imports if imports else ""}
+
+# revision identifiers, used by Alembic.
+revision: str = ${repr(up_revision)}
+down_revision: Union[str, None] = ${repr(down_revision)}
+branch_labels: Union[str, Sequence[str], None] = ${repr(branch_labels)}
+depends_on: Union[str, Sequence[str], None] = ${repr(depends_on)}
+
+
+def upgrade() -> None:
+    ${upgrades if upgrades else "pass"}
+
+
+def downgrade() -> None:
+    ${downgrades if downgrades else "pass"}
+
+
+
+================================================
+FILE: app/database/models/__init__.py
+================================================
+from .base import Base
+from .semd import Semd, Section
+from .path import Path
+
+__all__ = (
+    "Base",
+    "Semd",
+    "Section",
+    "Path",
+)
+
+
+================================================
+FILE: app/database/models/base.py
+================================================
+import re
+from typing import Annotated
+from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy.orm import mapped_column, DeclarativeBase, declared_attr
+
+
+class Base(AsyncAttrs, DeclarativeBase):
+
+    @declared_attr.directive
+    def __tablename__(cls) -> str:
+        snake_case_name = re.sub(r"(?<!^)(?=[A-Z])", "_", cls.__name__).lower()
+        return f"{snake_case_name}"
+    
+int_pk = Annotated[int, mapped_column(primary_key=True)]
+
+
+================================================
+FILE: app/repositories/__init__.py
+================================================
+from .employees import EmployeesRepository
+
+__all__ = [
+    "EmployeesRepository"
+]
+
+
+================================================
+FILE: app/repositories/employees.py
+================================================
+from typing import Protocol
+from schemas import EmployeesDTO, EmployeeFilterDTO
+
+
+class EmployeesRepository:
+    async def get_list(self, filter: EmployeeFilterDTO) -> EmployeesDTO: ...
+    async def get_count(self, filter: EmployeeFilterDTO) -> int: ...
+    async def update(self, employee_uuid: str, employee: EmployeesDTO) -> EmployeesDTO: ...
+    async def soft_delete(self, employee_uuid: str) -> EmployeesDTO: ...
+
+
+================================================
+FILE: app/schemas/__init__.py
+================================================
+from .employee import EmployeesDTO, Gender, EmployeeFilterDTO
+from .base import BaseRequest, BaseResponse
+
+
+__all__ = [
+    "EmployeesDTO",
+    "BaseRequest", 
+    "BaseResponse",
+    "Gender",
+]
+
+
+
+================================================
+FILE: app/schemas/base.py
+================================================
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class BaseDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+
+class BaseRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+        str_strip_whitespace=True,
+    )
+
+
+class BaseResponse(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)
+    
+
+
+================================================
+FILE: app/schemas/employee.py
+================================================
+from datetime import date
+from enum import Enum
+from pydantic import Field 
+from .base import BaseDTO
+
+
+class Gender(str, Enum):
+    MALE = "male"
+    FEMALE = "female"
+
+
+class EmployeeDTO(BaseDTO):
+    id: int
+    first_name: str
+    last_name: str
+    patronymic: str | None = None 
+    birth_date: date | None = None
+    phone: str
+    gender: Gender 
+    avatar_url: str | None = None
+    # deleted
+
+
+class EmployeeFilterDTO(BaseDTO):
+    page: int
+    per_page: int
+    search: str | None = None
+    gender: list[Gender] | None = None
+    age_from: str | None = None
+    age_to: str | None = None
+
+
+================================================
+FILE: app/services/__init__.py
+================================================
+from .employees_service import EmployeesService
+
+__all__ = [
+    "EmployeesService"
+]
+
+
+================================================
+FILE: app/services/employees_service.py
+================================================
+from schemas import EmployeesDTO, EmployeeFilterDTO
+from contracts import EmployeesRepositoryProtocol
+
+
+class EmployeesService:
+
+    def __init__(self, employees_repo: EmployeesRepositoryProtocol):
+        self.employees_repo = employees_repo
+
+
+    async def get_list(self, filter: EmployeeFilterDTO) -> tuple[EmployeesDTO, int]: 
+        employees = self.employees_repo.get_list(filter)
+        count = self.employees_repo.get_count(filter)
+        return employees, count
+
+
+    async def update(self, employee_uuid: str, employee: EmployeesDTO) -> EmployeesDTO: 
+        ...
+
+
+    async def soft_delete(self, employee_uuid: str) -> EmployeesDTO: 
+        ...
+
+
+
+================================================
+FILE: test/api/routes.py
+================================================
+import logging
+from fastapi import APIRouter
+from api.handlers.employee import router as employees_handlers
+
+router = APIRouter(prefix="/api/v1")
+
+router.include_router(employees_handlers, tags=["employees_handlers"]) 
+
+
+
+================================================
+FILE: test/api/handlers/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/api/handlers/employee.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/api/serializer/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/api/serializer/employee.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/repositories/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/services/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/services/employees_service.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/sсhemas/__init__.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/sсhemas/base.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: test/sсhemas/employee.py
+================================================
+[Empty file]
+
