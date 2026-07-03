@@ -64,7 +64,7 @@ function renderTable(employees) {
         const genderText = emp.gender === 'male' ? 'Мужской' : 'Женский';
         const birthDate = emp.birth_date ? emp.birth_date : '-';
         
-        const avatarUrl = emp.avatar_url || 'https://via.placeholder.com/40';
+        const avatarUrl = emp.avatar_url || '/static/files/default_user_image.png';
 
         tbody.innerHTML += `
             <tr class="border-b hover:bg-gray-50">

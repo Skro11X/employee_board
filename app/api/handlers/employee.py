@@ -26,7 +26,7 @@ web_router = APIRouter()
 
 templates = Jinja2Templates(directory=settings.TEMPLATES_DIR)
 
-@web_router.get("/", response_class=HTMLResponse)
+@web_router.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def index_page(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
