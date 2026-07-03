@@ -1,8 +1,8 @@
 from datetime import date
 from sqlalchemy import String, Date, Enum as SQLEnum, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
-from app.database.models.base import Base, int_pk
-from app.schemas.employee import Gender
+from database.models.base import Base, int_pk
+from sсhemas.employee import Gender
 
 class Employee(Base):
     id: Mapped[int_pk]

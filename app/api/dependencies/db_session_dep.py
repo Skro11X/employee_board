@@ -1,5 +1,5 @@
 from typing import AsyncGenerator
-from app.database.database import engine
+from database.database import engine
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

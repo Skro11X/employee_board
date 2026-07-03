@@ -7,7 +7,7 @@ from pydantic import BaseModel
 class LogConfig(BaseModel):
     """Logging configuration to be set for the server"""
 
-    LOGGER_NAME: str = "employees_board"
+    LOGGER_NAME: str = "employee_board"
     LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | %(name)s | %(message)s"
     LOG_LEVEL: str = "DEBUG"
 

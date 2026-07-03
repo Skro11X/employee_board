@@ -1,7 +1,9 @@
-import logging
 from fastapi import APIRouter
-from api.handlers.employee import router as employees_handlers
+from api.handlers.employee import api_router as employees_handlers_api
+from api.handlers.employee import web_router as employees_handlers_web
 
-router = APIRouter(prefix="/api/v1")
+api_router = APIRouter(prefix="/api/v1")
+api_router.include_router(employees_handlers_api, tags=["employees_api"]) 
 
-router.include_router(employees_handlers, tags=["employees_handlers"]) 
+web_router = APIRouter(prefix='', tags=["Web UI"])
+web_router.include_router(employees_handlers_web, tags=["employees_web"])

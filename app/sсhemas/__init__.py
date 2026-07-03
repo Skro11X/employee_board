@@ -1,9 +1,9 @@
-from .employee import EmployeesDTO, Gender, EmployeeFilterDTO
+from .employee import EmployeeDTO, EmployeeFilterDTO, Gender
 from .base import BaseRequest, BaseResponse
 
-
 __all__ = [
-    "EmployeesDTO",
+    "EmployeeDTO",
+    "EmployeeFilterDTO",
     "BaseRequest", 
     "BaseResponse",
     "Gender",

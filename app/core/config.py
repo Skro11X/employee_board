@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -9,6 +10,11 @@ class Settings(BaseSettings):
     DB_HOST: str = "db"
     DB_PORT: int = 5432
     DB_NAME: str = "employee_board"
+
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent # Указывает на папку app/
+    TEMPLATES_DIR: Path = BASE_DIR / "templates"
+    STATIC_DIR: Path = BASE_DIR / "static"
+    FILES_DIR: Path = STATIC_DIR / "files"
 
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"),
